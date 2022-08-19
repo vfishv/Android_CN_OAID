@@ -30,6 +30,7 @@ android {
 
     splits {
         //CPU架构分包
+        /*
         abi {
             //是否开启
             enable true
@@ -45,7 +46,7 @@ android {
             }
             //是否打一个包含全部架构的包
             universalApk false
-        }
+        }*/
         //分辨率分包
         density {
             // 是否开启
@@ -118,7 +119,7 @@ android {
             minifyEnabled enableJavaProguard as boolean
             //混淆配置文件
             proguardFiles 'proguard-common.pro', 'proguard-rules.pro'
-            signingConfig signingConfigs.releaseConfig
+            //signingConfig signingConfigs.releaseConfig
         }
         // 调试版本
         debug {
@@ -127,7 +128,15 @@ android {
             zipAlignEnabled true
             shrinkResources false
             minifyEnabled false
-            signingConfig signingConfigs.releaseConfig
+            //signingConfig signingConfigs.releaseConfig
+        }
+        release {
+            debuggable true
+            jniDebuggable true
+            zipAlignEnabled true
+            shrinkResources false
+            minifyEnabled false
+            //signingConfig signingConfigs.releaseConfig
         }
     }
 

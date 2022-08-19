@@ -14,7 +14,7 @@
 android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion as Integer
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    //buildToolsVersion rootProject.ext.buildToolsVersion
     // 配置资源名前缀提示，避免资源名重复
     //resourcePrefix project.name == 'app' ? '' : project.name.toLowerCase() + '_'
 

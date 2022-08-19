@@ -22,19 +22,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="30dp"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tvGAID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="GAID"
+            android:textSize="14sp" />
+
+        <TextView
             android:id="@+id/tv_device_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:text=""
             android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_gaid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GAID"
+            android:textAllCaps="false"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/btn_get_device_id_1"

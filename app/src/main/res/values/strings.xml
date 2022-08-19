@@ -12,5 +12,5 @@
   -->
 
 <resources>
-    <string name="app_name" translatable="false">Demo</string>
+    <string name="app_name" translatable="false">CN OAID Demo</string>
 </resources>

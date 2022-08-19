@@ -17,6 +17,11 @@ dependencies {
     implementation project(':library')
     implementation androidxLibrary.multidex
     implementation androidxLibrary.appcompat
+
+    implementation 'androidx.ads:ads-identifier:1.0.0-alpha04'
+
+    // Used for the calls to addCallback() in the snippets on this page.
+    implementation 'com.google.guava:guava:28.0-android'
 }
 
 android {

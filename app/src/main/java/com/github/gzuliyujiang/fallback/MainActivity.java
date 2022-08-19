@@ -17,6 +17,7 @@ import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,12 +25,19 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.ads.identifier.AdvertisingIdClient;
+import androidx.ads.identifier.AdvertisingIdInfo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.gzuliyujiang.oaid.DeviceID;
 import com.github.gzuliyujiang.oaid.DeviceIdentifier;
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.OAIDLog;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+
+import java.util.concurrent.Executors;
 
 /**
  * @author 大定府羡民（1032694760@qq.com）
@@ -38,6 +46,7 @@ import com.github.gzuliyujiang.oaid.OAIDLog;
 public class MainActivity extends AppCompatActivity implements ActivityResultCallback<Boolean>, View.OnClickListener {
     private ActivityResultLauncher<String> resultLauncher;
     private TextView tvDeviceIdResult;
+    private TextView tvGAID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +55,13 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         setContentView(R.layout.activity_main);
         TextView tvDeviceInfo = findViewById(R.id.tv_device_info);
         tvDeviceInfo.setText(obtainDeviceInfo());
+        findViewById(R.id.btn_gaid).setOnClickListener(this);
         findViewById(R.id.btn_get_device_id_1).setOnClickListener(this);
         findViewById(R.id.btn_get_device_id_2).setOnClickListener(this);
         tvDeviceIdResult = findViewById(R.id.tv_device_id_result);
+        tvGAID = findViewById(R.id.tvGAID);
+
+        determineAdvertisingInfo();
     }
 
     @Override
@@ -64,7 +77,9 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_get_device_id_1) {
+        if (id == R.id.btn_gaid) {
+            obtainDeviceInfo();
+        } else if (id == R.id.btn_get_device_id_1) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 obtainDeviceId();
                 return;
@@ -156,6 +171,39 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         sb.append(Build.VERSION.SDK_INT);
         sb.append(")");
         return sb.toString();
+    }
+
+
+    private void determineAdvertisingInfo() {
+        if (AdvertisingIdClient.isAdvertisingIdProviderAvailable(this))
+        {
+            ListenableFuture<AdvertisingIdInfo> advertisingIdInfoListenableFuture =
+                    AdvertisingIdClient.getAdvertisingIdInfo(getApplicationContext());
+            Futures.addCallback(advertisingIdInfoListenableFuture, new FutureCallback<AdvertisingIdInfo>() {
+                @Override
+                public void onSuccess(AdvertisingIdInfo adInfo) {
+                    String id = adInfo.getId();
+                    tvGAID.setText("GAID:" + id);
+                    String providerPackageName = adInfo.getProviderPackageName();
+                    boolean isLimitTrackingEnabled = adInfo.isLimitAdTrackingEnabled();
+                }
+
+                // Any exceptions thrown by getAdvertisingIdInfo()
+                // cause this method to get called.
+                @Override
+                public void onFailure(Throwable throwable) {
+                    tvGAID.setText("GAID failed:" + throwable.getMessage());
+                    Log.e("MY_APP_TAG", "Failed to connect to Advertising ID provider.");
+                    // Try to connect to the Advertising ID provider again,
+                    // or fall back to an ads solution that doesn't require
+                    // using the Advertising ID library.
+                }
+            }, Executors.newSingleThreadExecutor());
+        } else {
+            tvGAID.setText("GAID: NOT Available");
+            // The Advertising ID client library is unavailable. Use a different
+            // library to perform any required ads use cases.
+        }
     }
 
 }
