@@ -18,6 +18,17 @@ dependencies {
     implementation androidxLibrary.multidex
     implementation androidxLibrary.appcompat
 
+    def spider_man = "v1.1.9"
+    debugImplementation "com.github.simplepeng.SpiderMan:spiderman:${spider_man}"
+    releaseImplementation "com.github.simplepeng.SpiderMan:spiderman-no-op:${spider_man}"
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+    implementation("com.squareup.okhttp3:okhttp:3.12.13")
+    implementation "com.google.code.gson:gson:2.9.1"
+    implementation "com.github.chuckerteam.chucker:library:3.5.2"
+    //debugImplementation "com.github.chuckerteam.chucker:library:3.5.2"
+    //releaseImplementation "com.github.chuckerteam.chucker:library-no-op:3.5.2"
+
     implementation 'androidx.ads:ads-identifier:1.0.0-alpha04'
 
     // Used for the calls to addCallback() in the snippets on this page.
